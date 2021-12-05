@@ -67,7 +67,7 @@ parseInp (x:xs) = (parseInts x, parseBoards xs) where
     identify bs = zip [1..length bs] bs
 
     groupInp :: ([a] -> Bool) -> (a -> Bool) -> [a] -> [[a]]
-    groupInp g f = filter g . groupBy (\a b -> all f [a,b])
+    groupInp g f = filter g . groupBy (\a b -> f a && f b)
 
     -- Returns Maybe Int's since all the numbers I needed were Maybes anyways
     parseInts = map (Just . read) . groupInp (isDigit . head) isDigit :: String -> [Cell]
