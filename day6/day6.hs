@@ -1,11 +1,6 @@
 import Data.Map (Map, mapKeys, findWithDefault, delete, insertWith, fromList, empty, elems)
 import Data.Char (isDigit)
-import Data.List (nubBy)
-
-import Data.Char (isDigit)
-import Data.List(groupBy)
-
--- import qualified Data.Map as M (map)
+import Data.List (nubBy, groupBy)
 
 main = do
     input <- readFile "input.txt" >>= return . createMap . parseInts
