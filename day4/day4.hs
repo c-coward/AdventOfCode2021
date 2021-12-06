@@ -4,6 +4,8 @@ import Data.Char (isDigit)
 import Data.List (groupBy, nubBy)
 import Data.Maybe (catMaybes, fromJust)
 
+import Main.Utility
+
 type Cell = Maybe Int
 type Pos = (Int, Int)
 
@@ -61,14 +63,8 @@ tupAdd (a, b) (c, d) = (a+c, b+d)
 
 parseInp :: [String] -> ([Cell], [Board])
 parseInp (x:xs) = (parseInts x, parseBoards xs) where
-    parseBoard = (,) (-1) . listArray ((1,1),(5,5)) . concatMap parseInts
+    parseBoard = (,) (-1) . listArray ((1,1),(5,5)) . concatMap (map Just . parseInts)
 
     -- Associate each board with an ID
     identify bs = zip [1..length bs] bs
-
-    groupInp :: ([a] -> Bool) -> (a -> Bool) -> [a] -> [[a]]
-    groupInp g f = filter g . groupBy (\a b -> f a && f b)
-
-    -- Returns Maybe Int's since all the numbers I needed were Maybes anyways
-    parseInts = map (Just . read) . groupInp (isDigit . head) isDigit :: String -> [Cell]
     parseBoards = identify . map parseBoard . groupInp (/= [""]) (not . null)
