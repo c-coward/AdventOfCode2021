@@ -2,8 +2,6 @@ import Data.Char (isDigit)
 import Data.List (groupBy, intersect, nub)
 import qualified Data.Map as M (insertWith, filter, empty)
 
-import Main.Utility
-
 type Point = (Int, Int)
 type LineSeg = (Point, Point)
 
@@ -39,3 +37,6 @@ reduce (a, b) = let g = gcd a b in (a `div` g, b `div` g)
 
 mkLineSeg :: [Int] -> LineSeg
 mkLineSeg [x0,y0,x1,y1] = ((x0, y0), (x1, y1))
+
+groupInp g f = filter g . groupBy (\a b -> f a && f b)
+parseInts = map read . groupInp (isDigit . head) isDigit :: String -> [Int]
