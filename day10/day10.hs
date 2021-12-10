@@ -28,7 +28,7 @@ findFirstIllegal = go "" where
         | match y == head xs = go (tail xs) ys
         | otherwise = Just y
 
-match :: Char -> Char
+match, unmatch :: Char -> Char
 match ')' = '('
 match ']' = '['
 match '}' = '{'
