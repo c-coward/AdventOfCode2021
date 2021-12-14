@@ -8,8 +8,8 @@ data Fold = X Int | Y Int deriving Show
 
 main = do
     (points, folds) <- readFile "input.txt" >>= return . parseInp . lines
-    putStrLn $ show $ part1 folds points
-    putStrLn $ unlines $ part2 points folds
+    putStrLn $ (++) "Part 1: " $ show $ part1 folds points
+    putStrLn $ (++) "Part 2: \n" $ unlines $ part2 points folds
     return ()
 
 part1 fs = length . foldPaper (head fs)
