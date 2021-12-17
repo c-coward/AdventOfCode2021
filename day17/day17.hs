@@ -15,7 +15,7 @@ part2 = length . catMaybes . map (uncurry (step (0, 0))) . velocities
 
 -- Velocities includes the target range for convenience
 velocities :: (Point, Point) -> [(Point, (Point, Point))]
-velocities t@((lx, ly), (ux, uy)) = [((x, y), t) | x <- [0..ux], y <- [ly..ux]]
+velocities t@((lx, ly), (ux, uy)) = [((x, y), t) | x <- [0..ux], y <- [ly..ux + uy]]
 
 step :: Point -> Point -> (Point, Point) -> Maybe [Point]
 step c@(cx, cy) (dx, dy) t@((lx,ly), (ux,uy))
