@@ -1,4 +1,4 @@
-import Data.Map (Map, notMember, insert, findWithDefault, empty)
+import Data.Map (Map, notMember, insert, findWithDefault, empty, insertWith, findMin, delete)
 import Data.Char (digitToInt)
 import Data.List (transpose)
 import Data.Array.IArray
@@ -12,12 +12,9 @@ main = do
     putStrLn $ (++) "Part 1: " $ show $ part1 input
     putStrLn $ (++) "Part 2: " $ show $ part2 input
 
--- Part 2 chugs a bit, but still finishes in a reasonable time in GHCI
--- Compiled, it runs a decent bit quicker
-part1 = flip (dijkstra empty) [(0, (1, 1))] . inpToArr
-part2 = flip (dijkstra empty) [(0, (1, 1))] . inpToArr . expandCave
+part1 = flip (dijkstra empty) emptyH . inpToArr
+part2 = flip (dijkstra empty) emptyH . inpToArr . expandCave
 
--- I'm not used to writing Dijkstra's in haskell, so its a bit messy
 dijkstra :: Map Point Int -> Array Point Int -> Heap -> Int
 dijkstra v g hp
     | c == t    = d
@@ -49,18 +46,20 @@ a % m = ((a - 1) `mod` m) + 1
 inpToArr :: [[Int]] -> Array Point Int
 inpToArr xs = listArray ((1,1),(length xs, length $ head xs)) $ concat xs
 
--- Emulate a heap by keeping a list in sorted order
--- This isn't as time efficient, but is easier to implement
-type Heap = [(Int, Point)]
+-- Emulate heap behavior using a TreeMap with multiple values per key
+-- This is faster than my "sorted list" implementation
+type Heap = Map Int [Point]
+
+emptyH :: Heap
+emptyH = insertH (0, (1, 1)) empty
 
 insertH :: (Int, Point) -> Heap -> Heap
-insertH x []    = [x]
-insertH a@(x, _) (b@(y, _):ys)
-    | x <= y    = a : b : ys
-    | otherwise = b : insertH a ys
+insertH (k, v) = insertWith (++) k [v]
 
 minH :: Heap -> (Int, Point)
-minH (x:_) = x
+minH h = let (v, (m:_)) = findMin h in (v, m)
 
 popH :: Heap -> Heap
-popH (_:xs) = xs
+popH h = case findMin h of
+    (k, [x])    -> delete k h
+    (k, (x:xs)) -> insert k xs h
