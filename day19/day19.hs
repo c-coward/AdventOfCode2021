@@ -2,7 +2,7 @@ import Data.List (groupBy, intersect, transpose, nub, partition, uncons, union)
 import Data.Char (isDigit)
 import Data.Function (on)
 import Data.Set (Set, fromList, toList, insert, empty, intersection, unions)
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust, catMaybes)
 
 type Point = (Int, Int, Int)
 type Scanner = [Point]
@@ -30,10 +30,7 @@ lineup (x:xs) ys = zs ++ lineup xs' ys' where
 lineups (x:xs) = (x, (0, 0, 0)) : lineup [x] xs
 
 recenter :: Scanner -> Scanner -> (Scanner, Point)
-recenter a b = go a $ permute b where
-    go x (y:ys) = case tryMatch x y of
-        Nothing -> go x ys
-        Just y' -> y'
+recenter a b = head $ catMaybes $ map (tryMatch a) $ permute b where
 
 tryMatch :: Scanner -> Scanner -> Maybe (Scanner, Point)
 tryMatch xs ys = go ds where
