@@ -1,6 +1,5 @@
--- import Data.Map (Map, findWithDefault, empty, insert, fromList, elems, keys)
-import qualified Data.Set as S (unions, fromList, toList)
-import Data.List (groupBy, nub, sort)
+import Data.Set (unions, fromList, toList)
+import Data.List (groupBy)
 import Data.Array.IArray (Array, (!), array, listArray, inRange, bounds, indices, elems)
 import Data.Function (on)
 
@@ -25,7 +24,7 @@ getPtsSize (a, _) = sum $ map fromEnum $ elems a
 
 nextGen :: Code -> Image -> Image
 nextGen code img@(pts, cnd) = let
-    pts' = S.toList $ S.unions $ map (S.fromList . neighbs) $ indices pts
+    pts' = toList $ unions $ map (fromList . neighbs) $ indices pts
     ((ly, lx), (uy, ux)) = bounds pts
     in (array ((ly-1,lx-1),(uy+1,ux+1)) $ map (decode code img) pts',
         if code ! 0 then not cnd else cnd)
