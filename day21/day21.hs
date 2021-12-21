@@ -7,8 +7,8 @@ type StateMap = Map (Point, Point) Point
 
 main = do
     input <- readFile "input.txt" >>= return . (\[a,b]->(a, b)) . map (read . last . words) . lines
-    putStrLn $ show $ part1 input
-    putStrLn $ show $ part2 input
+    putStrLn $ (++) "Part 1: " $ show $ part1 input
+    putStrLn $ (++) "Part 2: " $ show $ part2 input
 
 part1 = sim dice 0 (0, 0)
 part2 = uncurry max . getScore
