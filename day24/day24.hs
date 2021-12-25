@@ -9,9 +9,9 @@ part2 = minimum . generateAllMONADs
 generateAllMONADs inp = concatMap (\w -> generateMONADs w [] [] inp) [1..9]
 
 generateMONADs :: Int -> [Int] -> [Int] -> [(Int, Int)] -> [Int]
-generateMONADs w s is [] = [toNum $ reverse is] -- Valid setup found
 generateMONADs w s is ((a, b):as)
     | a < 0 && a + (head s) /= w = [] -- If unable to pop from stack, invalid setup
+    | null as = [toNum $ reverse (w:is)] -- Valid setup found
     | otherwise = concatMap (\w' -> generateMONADs w' s' (w:is) as) $ [1..9]
     where s' = if a > 0 then (b + w) : s else tail s -- Push or pop from stack
 
